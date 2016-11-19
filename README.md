@@ -1,10 +1,14 @@
-### Usage
+# babel-plugin-transform-react-jsx
+
+## Installation
 
 ``` bash
 npm install babel-plugin-redom-jsx --save-dev
 ```
 
-babel config:
+## Usage
+
+### Babel config:
 
 ``` json
 {
@@ -17,52 +21,66 @@ babel config:
 }
 ```
 
-The plugin transpiles the following JSX:
-
-``` jsx
-<h1 class="hello-world">Hello World</h1>;
-```
-
-To the following JavaScript:
-
-``` js
-el(
-  'h1',
-  { 'class': 'hello-world' },
-  'Hello World'
-);
-```
-
 ### Assign to this
 
 The plugin transpiles the following JSX:
 
 ``` jsx
-class AssignExample {
+import { el, mount } from 'redom';
+
+// define Login component
+class Login {
   constructor () {
-    this.el = <div>
-      <span this="target">Hello World</span>
-      {this.input = <input type="text" />}
-    </div>
+    this.el = <form id="login" onsubmit={(e) => {
+      e.preventDefault();
+      const email = this.email.value;
+      const pass = this.pass.value;
+      console.log(email, pass);
+    }}>
+      <input type="email" class="email" this="email" />
+      <input type="password" class="pass" this="pass" />
+      <button type="submit">Sign in</button>
+    </form>
   }
 }
+
+// create login
+const login = new Login();
+
+// mount to DOM
+mount(document.body, login);
 ```
 
 To the following JavaScript:
 
 ``` js
-class AssignExample {
+import { el, mount } from 'redom';
+
+// define Login component
+class Login {
   constructor () {
     this.el = el(
-        'div',
-        null,
-        this['target'] = el(
-            'span',
-            null,
-            'Hello World'
-        ),
-        this.input = el('input', { type: 'text' })
+      "form",
+      { id: "login", onsubmit: (e) => {
+          e.preventDefault();
+          const email = this.email.value;
+          const pass = this.pass.value;
+          console.log(email, pass);
+      } },
+      this["email"] = el("input", { type: "email", "class": "email" }),
+      this["pass"] = el("input", { type: "password", "class": "pass" }),
+      el(
+        "button",
+        { type: "submit" },
+        "Sign in"
+      )
     );
   }
 }
+
+// create login
+const login = new Login();
+
+// mount to DOM
+mount(document.body, login);
 ```
