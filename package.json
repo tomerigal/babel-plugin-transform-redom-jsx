@@ -1,0 +1,13 @@
+{
+  "name": "babel-plugin-transform-redom-jsx",
+  "version": "v1.0.1",
+  "description": "Babel plugin for RE:DOM jsx",
+  "main": "index.js",
+  "keywords": [
+    "babel",
+    "redom",
+    "jsx"
+  ],
+  "author": "",
+  "license": "MIT"
+}
