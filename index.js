@@ -7,15 +7,17 @@ module.exports = function (babel) {
 		visitor: {
 			JSXElement: function JSXElement(path) {
 				var thisAttr = [];
-				var notThisAttr = [];
+				var restAttr = [];
 				path.node.openingElement.attributes.forEach(function (attr) {
-					return (attr.name.name === 'this' ? thisAttr : notThisAttr).push(attr);
+					return (attr.name.name === 'this' ? thisAttr : restAttr).push(attr);
 				});
 
 				if (thisAttr.length) {
-					var assignToThis = t.assignmentExpression('=', t.memberExpression(t.thisExpression(), thisAttr[thisAttr.length - 1].value, true), path.node);
-					path.node.openingElement.attributes = notThisAttr;
-					path.replaceWith(path.parent.type === 'JSXElement' ? t.jSXExpressionContainer(assignToThis) : assignToThis);
+					var attr = thisAttr[thisAttr.length - 1];
+          				var thisMember = t.isJSXExpressionContainer(attr.value) ? attr.value.expression : attr.value;
+          				var assignToThis = t.assignmentExpression('=', t.memberExpression(t.thisExpression(), thisMember, true), path.node);            
+        				path.node.openingElement.attributes = restAttr;  
+        				path.replaceWith(t.isJSXElement(path.parent) ? t.jSXExpressionContainer(assignToThis) : assignToThis);
 				}
 			}
 		}
