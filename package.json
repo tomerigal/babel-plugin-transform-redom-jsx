@@ -2,12 +2,18 @@
   "name": "babel-plugin-transform-redom-jsx",
   "version": "v1.0.1",
   "description": "Babel plugin for RE:DOM jsx",
-  "main": "index.js",
+  "main": "src/index.js",
+  "repository": "https://github.com/tomerigal/babel-plugin-transform-redom-jsx",
   "keywords": [
     "babel",
     "redom",
     "jsx"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "chai": "^3.5.0"
+  }
 }
