@@ -3,7 +3,7 @@
 ## Installation
 
 ``` bash
-npm install babel-plugin-redom-jsx --save-dev
+npm install babel-plugin-transform-redom-jsx --save-dev
 ```
 
 ## Usage
