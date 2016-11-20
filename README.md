@@ -29,7 +29,7 @@ The plugin transpiles the following JSX:
 import { el, text, mount } from 'redom';
 class A{
   constructor(attr, text) {
-    this.el = <div>
+    <div this="el">
       <h3>{attr.title}</h3>
       <span this="span">Hello</span> {text}
     </div>;
@@ -41,7 +41,7 @@ class A{
 
 class B{
   constructor() {
-    this.el = <div>
+    <div this="el">
       <A this="a" title="Hello World example">
         <span this="span">World</span>
       </A>
@@ -65,7 +65,7 @@ To the following JavaScript:
 import { el, text, mount } from 'redom';
 class A{
   constructor(attr, text) {
-    this.el = el(
+    this["el"] = el(
       "div",
       null,
       el(
@@ -89,7 +89,7 @@ class A{
 
 class B{
   constructor() {
-    this.el = el(
+    this["el"] = el(
       "div",
       null,
       this["a"] = new A({ title: "Hello World example" }, this["span"] = el(
@@ -122,7 +122,7 @@ import { el, mount } from 'redom';
 // define Login component
 class Login {
   constructor () {
-    this.el = <form id="login" onsubmit={(e) => {
+    <form this="el" id="login" onsubmit={(e) => {
       e.preventDefault();
       const email = this.email.value;
       const pass = this.pass.value;
@@ -135,11 +135,8 @@ class Login {
   }
 }
 
-// create login
-const login = new Login();
-
 // mount to DOM
-mount(document.body, login);
+mount(document.body, <Login/>);
 ```
 
 To the following JavaScript:
@@ -150,7 +147,7 @@ import { el, mount } from 'redom';
 // define Login component
 class Login {
   constructor () {
-    this.el = el(
+    this["el"] = el(
       "form",
       { id: "login", onsubmit: (e) => {
           e.preventDefault();
@@ -169,9 +166,6 @@ class Login {
   }
 }
 
-// create login
-const login = new Login();
-
 // mount to DOM
-mount(document.body, login);
+mount(document.body, new Login());
 ```
