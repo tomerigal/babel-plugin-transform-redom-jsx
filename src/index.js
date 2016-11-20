@@ -4,7 +4,8 @@ module.exports = function (babel) {
 	var t = babel.types;
 
 	return {
-		name: "ast-transform",
+		inherits: require("babel-plugin-syntax-jsx"),
+		name: "redom-jsx-transform",
 		visitor: {
 			JSXElement: function JSXElement(path, file) {
 				var thisAttr = [];
