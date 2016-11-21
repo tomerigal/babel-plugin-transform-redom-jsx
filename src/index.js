@@ -10,11 +10,15 @@ module.exports = function (babel) {
 			JSXElement: function JSXElement(path, file) {
 				var thisAttr = [];
 				var restAttr = [];
+				var list;
 				var node = path.node;
-				path.node.openingElement.attributes.forEach(function (attr) {
-					return (attr.name.name === 'this' ? thisAttr : restAttr).push(attr);
-				});
+				path.node.openingElement.attributes.forEach((attr) => {
+					if(attr.name.name === 'list'){
+                      	list = attr;
+                    }
 
+					(attr.name.name === 'this' ? thisAttr : restAttr).push(attr);
+				});
 				if (path.node.openingElement.name.name.match(/^[A-Z]/)) {
 					var attribObj = restAttr.length ? buildOpeningElementAttributes(restAttr, file) : t.objectExpression([]);
 					var children = t.react.buildChildren(path.node).map((node) => {
@@ -35,6 +39,11 @@ module.exports = function (babel) {
 					node = t.isJSXElement(path.parent) ? t.jSXExpressionContainer(assignToThis) : assignToThis;
 				}
 
+				if(list){
+					var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
+					node = t.callExpression(t.identifier('list'), [node, listMember])
+				}
+				
 				if (node !== path.node) {
 					path.replaceWith(node);
 				}
@@ -42,9 +51,6 @@ module.exports = function (babel) {
 			}
 		}
 	};
-
-	;
-
 
 	function convertAttributeValue(node) {
 		if (t.isJSXExpressionContainer(node)) {
