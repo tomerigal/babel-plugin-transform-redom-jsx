@@ -9,16 +9,20 @@ module.exports = function (babel) {
 		visitor: {
 			JSXElement: function JSXElement(path, file) {
 				var thisAttr = [];
+              	var listAttr = [];
 				var restAttr = [];
-				var list;
+              	var list;
 				var node = path.node;
-				path.node.openingElement.attributes.forEach((attr) => {
-					if(attr.name.name === 'list'){
-                      	list = attr;
+				path.node.openingElement.attributes.forEach((attr) => { 
+                  	if(attr.name.name === 'list'){
+                      	listAttr.push(attr);
+                    }else if(attr.name.name === 'this'){
+                    	thisAttr.push(attr);
+                    }else{
+                      	restAttr.push(attr)
                     }
-
-					(attr.name.name === 'this' ? thisAttr : restAttr).push(attr);
-				});
+                }
+				);
 				if (path.node.openingElement.name.name.match(/^[A-Z]/)) {
 					var attribObj = restAttr.length ? buildOpeningElementAttributes(restAttr, file) : t.objectExpression([]);
 					var children = t.react.buildChildren(path.node).map((node) => {
@@ -38,12 +42,14 @@ module.exports = function (babel) {
 					path.node.openingElement.attributes = restAttr;
 					node = t.isJSXElement(path.parent) ? t.jSXExpressionContainer(assignToThis) : assignToThis;
 				}
-
-				if(list){
-					var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
-					node = t.callExpression(t.identifier('list'), [node, listMember])
-				}
-				
+              
+              	if(listAttr.length){
+                  list = listAttr[listAttr.length - 1];
+                  var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
+                  path.node.openingElement.attributes = restAttr;
+                  node = t.callExpression(t.identifier('list'), [node, listMember]);
+                }
+              	
 				if (node !== path.node) {
 					path.replaceWith(node);
 				}
