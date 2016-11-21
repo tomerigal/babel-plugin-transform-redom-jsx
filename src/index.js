@@ -34,6 +34,15 @@ module.exports = function (babel) {
 					});
 					node = t.newExpression(path.node.openingElement.name, [attribObj].concat(children));
 				}
+				if(listAttr.length){
+                    list = listAttr[listAttr.length - 1];
+                    var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
+                    if(isComponent){
+                      node = t.memberExpression(node, t.identifier('el'), false);
+                    }
+                    path.node.openingElement.attributes = restAttr;
+                    node = t.callExpression(t.identifier('list'), [node, listMember]);
+                }
 
 				if (thisAttr.length) {
 					var attr = thisAttr[thisAttr.length - 1];
@@ -43,15 +52,7 @@ module.exports = function (babel) {
 					node = t.isJSXElement(path.parent) ? t.jSXExpressionContainer(assignToThis) : assignToThis;
 				}
               
-              	if(listAttr.length){
-                  list = listAttr[listAttr.length - 1];
-                  var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
-                  if(isComponent){
-                    node = t.memberExpression(node, t.identifier('el'), false);
-                  }
-                  path.node.openingElement.attributes = restAttr;
-                  node = t.callExpression(t.identifier('list'), [node, listMember]);
-                }
+              	
               	
 				if (node !== path.node) {
 					path.replaceWith(node);
