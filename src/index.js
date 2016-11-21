@@ -8,6 +8,7 @@ module.exports = function (babel) {
 		name: "redom-jsx-transform",
 		visitor: {
 			JSXElement: function JSXElement(path, file) {
+              	var isComponent = path.node.openingElement.name.name.match(/^[A-Z]/);
 				var thisAttr = [];
               	var listAttr = [];
 				var restAttr = [];
@@ -23,7 +24,7 @@ module.exports = function (babel) {
                     }
                 }
 				);
-				if (path.node.openingElement.name.name.match(/^[A-Z]/)) {
+				if (isComponent) {
 					var attribObj = restAttr.length ? buildOpeningElementAttributes(restAttr, file) : t.objectExpression([]);
 					var children = t.react.buildChildren(path.node).map((node) => {
 						if (t.isLiteral(node)) {
@@ -31,7 +32,6 @@ module.exports = function (babel) {
 						}
 						return node;
 					});
-
 					node = t.newExpression(path.node.openingElement.name, [attribObj].concat(children));
 				}
 
@@ -46,6 +46,9 @@ module.exports = function (babel) {
               	if(listAttr.length){
                   list = listAttr[listAttr.length - 1];
                   var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
+                  if(isComponent){
+                    node = t.memberExpression(node, t.identifier('el'), false);
+                  }
                   path.node.openingElement.attributes = restAttr;
                   node = t.callExpression(t.identifier('list'), [node, listMember]);
                 }
