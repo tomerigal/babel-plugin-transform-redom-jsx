@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-redom-jsx",
-  "version": "v1.0.2",
+  "version": "v1.0.3",
   "description": "Babel plugin for RE:DOM jsx",
   "main": "src/index.js",
   "repository": "https://github.com/tomerigal/babel-plugin-transform-redom-jsx",
