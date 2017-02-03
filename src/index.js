@@ -8,14 +8,23 @@ module.exports = function (babel) {
 		name: "redom-jsx-transform",
 		visitor: {
 			JSXElement: function JSXElement(path, file) {
+              	var isComponent = path.node.openingElement.name.name.match(/^[A-Z]/);
 				var thisAttr = [];
+              	var listAttr = [];
 				var restAttr = [];
+              	var list;
 				var node = path.node;
-				path.node.openingElement.attributes.forEach(function (attr) {
-					return (attr.name.name === 'this' ? thisAttr : restAttr).push(attr);
-				});
-
-				if (path.node.openingElement.name.name.match(/^[A-Z]/)) {
+				path.node.openingElement.attributes.forEach((attr) => { 
+                  	if(attr.name.name === 'list'){
+                      	listAttr.push(attr);
+                    }else if(attr.name.name === 'this'){
+                    	thisAttr.push(attr);
+                    }else{
+                      	restAttr.push(attr);
+                    }
+                }
+				);
+				if (isComponent) {
 					var attribObj = restAttr.length ? buildOpeningElementAttributes(restAttr, file) : t.objectExpression([]);
 					var children = t.react.buildChildren(path.node).map((node) => {
 						if (t.isLiteral(node)) {
@@ -23,9 +32,14 @@ module.exports = function (babel) {
 						}
 						return node;
 					});
-
 					node = t.newExpression(path.node.openingElement.name, [attribObj].concat(children));
 				}
+				if(listAttr.length){
+                    list = listAttr[listAttr.length - 1];
+                    var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
+                    path.node.openingElement.attributes = restAttr;
+                    node = t.callExpression(t.identifier('list'), [node, listMember]);
+                }
 
 				if (thisAttr.length) {
 					var attr = thisAttr[thisAttr.length - 1];
@@ -34,7 +48,9 @@ module.exports = function (babel) {
 					path.node.openingElement.attributes = restAttr;
 					node = t.isJSXElement(path.parent) ? t.jSXExpressionContainer(assignToThis) : assignToThis;
 				}
-
+              
+              	
+              	
 				if (node !== path.node) {
 					path.replaceWith(node);
 				}
@@ -42,9 +58,6 @@ module.exports = function (babel) {
 			}
 		}
 	};
-
-	;
-
 
 	function convertAttributeValue(node) {
 		if (t.isJSXExpressionContainer(node)) {
