@@ -1,3 +1,3 @@
 function Test() {
-	list(new MyComp({}, <div></div>).el, Li);
+	list(new MyComp({}, <div></div>), Li);
 }

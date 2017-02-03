@@ -20,7 +20,7 @@ module.exports = function (babel) {
                     }else if(attr.name.name === 'this'){
                     	thisAttr.push(attr);
                     }else{
-                      	restAttr.push(attr)
+                      	restAttr.push(attr);
                     }
                 }
 				);
@@ -37,9 +37,6 @@ module.exports = function (babel) {
 				if(listAttr.length){
                     list = listAttr[listAttr.length - 1];
                     var listMember = t.isJSXExpressionContainer(list.value) ? list.value.expression : list.value;
-                    if(isComponent){
-                      node = t.memberExpression(node, t.identifier('el'), false);
-                    }
                     path.node.openingElement.attributes = restAttr;
                     node = t.callExpression(t.identifier('list'), [node, listMember]);
                 }
