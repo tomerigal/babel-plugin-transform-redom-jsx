@@ -15,7 +15,9 @@ module.exports = function (babel) {
               	var list;
 				var node = path.node;
 				path.node.openingElement.attributes.forEach((attr) => { 
-                  	if(attr.name.name === 'list'){
+                  	if(t.isJSXSpreadAttribute(attr)){
+                      	restAttr.push(attr);
+                    }else if(attr.name.name === 'list'){
                       	listAttr.push(attr);
                     }else if(attr.name.name === 'this'){
                     	thisAttr.push(attr);
