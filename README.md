@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx
+# babel-plugin-transform-redom-jsx
 
 ## Installation
 
