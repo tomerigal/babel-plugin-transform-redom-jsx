@@ -1,22 +1,25 @@
-var babel = require("babel-core");
-var redomT = require("../src/index");
-var expect = require("chai").expect;
-var path = require("path");
-var fs = require("fs");
+const babel = require("@babel/core");
+const { expect } = require("chai");
+const path = require("path");
+const fs = require("fs");
+const transformer = require("../lib");
 
-function trim(str) { return str.replace(/^\s+|\s+$/, ""); }
 function removeSpaces(str) { return str.replace(/\s/gm, ""); }
+const fixturesDir = path.join(__dirname, "fixtures");
 
 describe("transform redom jsx", () => {
-    const fixturesDir = path.join(__dirname, "fixtures");
-    fs.readdirSync(fixturesDir).map((caseName) => {
-        it(`should ${caseName.split("-").join(" ")}`, () => {
+
+    for (const caseName of fs.readdirSync(fixturesDir)) {
+
+        it(`supports ${caseName.split("-").join(" ")}`, () => {
+
             const fixtureDir = path.join(fixturesDir, caseName);
             const actual = babel.transformFileSync(
-                path.join(fixtureDir, "actual.js"), { plugins: [redomT] }
+                path.join(fixtureDir, "actual.js"),
+                { plugins: [transformer] }
             );
-            const expected = fs.readFileSync(path.join(fixtureDir, "expected.js")).toString();
+            const expected = fs.readFileSync(path.join(fixtureDir, "expected.js"), 'utf8');
             expect(removeSpaces(actual.code)).to.equal(removeSpaces(expected));
         });
-    });
+    };
 });
