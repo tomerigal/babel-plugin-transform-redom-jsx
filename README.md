@@ -13,7 +13,7 @@ npm install babel-plugin-transform-redom-jsx --save-dev
 ``` json
 {
     "plugins": [
-        "babel-plugin-redom-jsx",
+        "babel-plugin-transform-redom-jsx",
         ["transform-react-jsx", {
             "pragma": "el"
         }]
