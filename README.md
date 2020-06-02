@@ -1,8 +1,11 @@
 # babel-plugin-transform-redom-jsx
 
+[![Build Status](https://github.com/tomerigal/babel-plugin-transform-redom-jsx/badge.svg)](https://github.com/tomerigal/babel-plugin-transform-redom-jsx/actions)
+[![npm version](https://badge.fury.io/js/babel-plugin-transform-redom-jsx.svg)](https://badge.fury.io/js/babel-plugin-transform-redom-jsx)
+
 ## Installation
 
-``` bash
+```bash
 npm install babel-plugin-transform-redom-jsx --save-dev
 ```
 
@@ -10,14 +13,17 @@ npm install babel-plugin-transform-redom-jsx --save-dev
 
 ### Babel config:
 
-``` json
+```json
 {
-    "plugins": [
-        "babel-plugin-transform-redom-jsx",
-        ["transform-react-jsx", {
-            "pragma": "el"
-        }]
+  "plugins": [
+    "babel-plugin-transform-redom-jsx",
+    [
+      "transform-react-jsx",
+      {
+        "pragma": "el"
+      }
     ]
+  ]
 }
 ```
 
@@ -25,21 +31,21 @@ npm install babel-plugin-transform-redom-jsx --save-dev
 
 The plugin transpiles the following JSX:
 
-``` jsx
-import { el, text, mount } from 'redom';
-class A{
+```jsx
+import { el, text, mount } from "redom";
+class A {
   constructor(attr, text) {
     <div this="el">
       <h3>{attr.title}</h3>
       <span this="span">Hello</span> {text}
     </div>;
   }
-  update(){
+  update() {
     this.span.textContent = "Hi";
   }
 }
 
-class B{
+class B {
   constructor() {
     <div this="el">
       <A this="a" title="Hello World example">
@@ -61,41 +67,33 @@ b.update();
 ```
 
 To the following JavaScript:
-``` js
-import { el, text, mount } from 'redom';
-class A{
+
+```js
+import { el, text, mount } from "redom";
+class A {
   constructor(attr, text) {
     this["el"] = el(
       "div",
       null,
-      el(
-        "h3",
-        null,
-        attr.title
-      ),
-      this["span"] = el(
-        "span",
-        null,
-        "Hello"
-      ),
+      el("h3", null, attr.title),
+      (this["span"] = el("span", null, "Hello")),
       " ",
       text
     );
   }
-  update(){
+  update() {
     this.span.textContent = "Hi";
   }
 }
 
-class B{
+class B {
   constructor() {
     this["el"] = el(
       "div",
       null,
-      this["a"] = new A({ title: "Hello World example" }, this["span"] = el(
-        "span",
-        null,
-        "World"
+      (this["a"] = new A(
+        { title: "Hello World example" },
+        (this["span"] = el("span", null, "World"))
       ))
     );
   }
@@ -116,52 +114,55 @@ b.update();
 
 The plugin transpiles the following JSX:
 
-``` jsx
-import { el, mount } from 'redom';
+```jsx
+import { el, mount } from "redom";
 
 // define Login component
 class Login {
-  constructor () {
-    <form this="el" id="login" onsubmit={(e) => {
-      e.preventDefault();
-      const email = this.email.value;
-      const pass = this.pass.value;
-      console.log(email, pass);
-    }}>
+  constructor() {
+    <form
+      this="el"
+      id="login"
+      onsubmit={(e) => {
+        e.preventDefault();
+        const email = this.email.value;
+        const pass = this.pass.value;
+        console.log(email, pass);
+      }}
+    >
       <input type="email" class="email" this="email" />
       <input type="password" class="pass" this="pass" />
       <button type="submit">Sign in</button>
-    </form>
+    </form>;
   }
 }
 
 // mount to DOM
-mount(document.body, <Login/>);
+mount(document.body, <Login />);
 ```
 
 To the following JavaScript:
 
-``` js
-import { el, mount } from 'redom';
+```js
+import { el, mount } from "redom";
 
 // define Login component
 class Login {
-  constructor () {
+  constructor() {
     this["el"] = el(
       "form",
-      { id: "login", onsubmit: (e) => {
+      {
+        id: "login",
+        onsubmit: (e) => {
           e.preventDefault();
           const email = this.email.value;
           const pass = this.pass.value;
           console.log(email, pass);
-      } },
-      this["email"] = el("input", { type: "email", "class": "email" }),
-      this["pass"] = el("input", { type: "password", "class": "pass" }),
-      el(
-        "button",
-        { type: "submit" },
-        "Sign in"
-      )
+        },
+      },
+      (this["email"] = el("input", { type: "email", class: "email" })),
+      (this["pass"] = el("input", { type: "password", class: "pass" })),
+      el("button", { type: "submit" }, "Sign in")
     );
   }
 }
