@@ -1,6 +1,6 @@
 # babel-plugin-transform-redom-jsx
 
-[![Build Status](https://github.com/tomerigal/babel-plugin-transform-redom-jsx/badge.svg)](https://github.com/tomerigal/babel-plugin-transform-redom-jsx/actions)
+[![Build Status](https://github.com/tomerigal/babel-plugin-transform-redom-jsx/workflows/tests/badge.svg)](https://github.com/tomerigal/babel-plugin-transform-redom-jsx/actions)
 [![npm version](https://badge.fury.io/js/babel-plugin-transform-redom-jsx.svg)](https://badge.fury.io/js/babel-plugin-transform-redom-jsx)
 
 ## Installation
