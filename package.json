@@ -15,7 +15,7 @@
   "author": "Tomer Igal",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-syntax-jsx": "^7.0.0"
+    "@babel/plugin-syntax-jsx": "^7.10.4"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
