@@ -18,7 +18,7 @@
     "@babel/plugin-syntax-jsx": "^7.12.13"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
+    "@babel/core": "^7.13.8",
     "chai": "^4.3.3",
     "mocha": "^8.3.0"
   },
