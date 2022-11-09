@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "mocha": "^10.1.0"
   },
   "files": [
