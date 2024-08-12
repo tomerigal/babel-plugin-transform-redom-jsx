@@ -15,12 +15,11 @@
   "author": "Tomer Igal",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-syntax-jsx": "^7.22.5"
+    "@babel/plugin-syntax-jsx": "^7.24.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.9",
-    "chai": "^4.3.7",
-    "mocha": "^10.2.0"
+    "@babel/core": "^7.25.2",
+    "mocha": "^10.7.3"
   },
   "files": [
     "lib"
